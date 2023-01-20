@@ -1,0 +1,12 @@
+body {
+    display: flex;
+    justify-content: center;
+    background-color: #8C52FF;
+}
+
+canvas {
+    border: solid black;
+    width: 500;
+    height: 500;
+    background-image: url(./images/White\ and\ Green\ Gaming\ Badge\ Logo.gif);
+}
