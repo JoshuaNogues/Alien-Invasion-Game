@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap');
+
 * {
     margin: 0;
     padding: 0;
 }
 
 body {
+    font-family: 'Black Ops One', 'cursive';
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,6 +22,7 @@ canvas {
 #start-button {
     background-color: white;
     padding: 10px 20px 10px 20px;
+    cursor: pointer;
 }
 
 .game-heading {

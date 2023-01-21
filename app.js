@@ -10,23 +10,35 @@ ship.src = './images/spaceship.png'
 const aliens = new Image()
 aliens.src = './images/sci-fi.png'
 
-let intervalId;
-let animationId;
+class Player {
+  constructor(){
+    this.position = {
+      x: 225,
+      y: 400
+    }
+
+    this.velocity = {
+      x: 0,
+    }
+
+    this.ship = ship
+    this.width = 50
+    this.height = 50
+  }
+
+    draw() {
+      // ctx.fillStyle = 'red'
+      // ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
+      ctx.drawImage(this.ship, this.position.x, this.position.y, this.width, this.height)
+    }
+}
+
+const player = new Player()
+player.draw()
 
 function animationLoop() {
-    animationId = setInterval(()=>{
-      updateCanvas()
-    }, 16)
-  }
+  requestAnimationFrame(animationLoop)
+  player.draw()
+}
 
-  function startGame() {
-  
-    player.x = startingX
-    player.y = startingY
-  
-    ctx.drawImage(road, 0, 0, 500, 700)
-    player.draw()
-    createObstacle()
-    animationLoop()
-  
-  }
+animationLoop()
