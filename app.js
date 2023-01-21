@@ -13,8 +13,8 @@ aliens.src = './images/sci-fi.png'
 class Player {
   constructor(){
     this.position = {
-      x: 225,
-      y: 400
+      x: 235,
+      y: 425
     }
 
     this.velocity = {
@@ -22,8 +22,8 @@ class Player {
     }
 
     this.ship = ship
-    this.width = 50
-    this.height = 50
+    this.width = 25
+    this.height = 25
   }
 
     draw() {
@@ -31,14 +31,43 @@ class Player {
       // ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
       ctx.drawImage(this.ship, this.position.x, this.position.y, this.width, this.height)
     }
+
+    update(){
+      ctx.clearRect(0,0,500,500)
+      this.draw()
+      this.position.x += this.velocity.x
+    }
 }
 
 const player = new Player()
 player.draw()
 
+//animation loop function
 function animationLoop() {
   requestAnimationFrame(animationLoop)
-  player.draw()
+  player.update()
 }
 
 animationLoop()
+
+addEventListener('keydown', e => {
+  switch(e.keyCode){
+    case 37:
+      player.velocity.x = -3.5
+      break
+    case 39:
+      player.velocity.x = +3.5
+      break
+    case 32:
+      break
+  }
+})
+
+
+window.onload = () => {
+  document.getElementById('start-button').onclick = () => {
+    if (gameOn === false) {
+      startGame();
+    }
+  }
+}

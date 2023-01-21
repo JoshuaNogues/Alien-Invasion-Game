@@ -19,10 +19,16 @@ canvas {
     background-image: url(./images/background.gif);
 }
 
+.logo-img {
+    width: 450px;
+}
+
 #start-button {
     background-color: white;
     padding: 10px 20px 10px 20px;
     cursor: pointer;
+    box-shadow: 3px 3px;
+    font-family: 'black ops one';
 }
 
 .game-heading {
@@ -45,6 +51,7 @@ h1 {
 }
 
 p {
-    color: white;
-    padding: 20px
+    color: black;
+    padding: 20px;
+    font-weight: 500;
 }
