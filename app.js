@@ -1,8 +1,8 @@
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d')
 
-const background = new Image()
-background.src = './images/background.gif'
+// const background = new Image()
+// background.src = './images/background.gif'
 
 const ship = new Image()
 ship.src = './images/spaceship.png'

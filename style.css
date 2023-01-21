@@ -6,11 +6,14 @@
 body {
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
     background-color: #8C52FF;
 }
 
 canvas {
     border: solid black;
+    background-image: url(./images/background.gif);
 }
 
 #start-button {
@@ -18,8 +21,26 @@ canvas {
     padding: 10px 20px 10px 20px;
 }
 
-.game-intro {
+.game-heading {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+#instructions {
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+h1 {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+p {
+    color: white;
+    padding: 20px
 }

@@ -8,16 +8,21 @@
     <title>Alien Invasion</title>
   </head>
   <body>
-    <div class="game-intro">
+    <div class="game-heading">
       <img src="./images/logo.png" alt="" class="logo-img" />
       <br />
-      <button id="start-button">StartGame</button>
-      <p>Use the left and right arrow to control the spaceship!</p>
       <img src="./images/arrows.png" alt="" class="arrows-img" />
     </div>
 
     <div id="game-board">
       <canvas id="canvas" width = 500 height = 500></canvas>
+    </div>
+
+    <div id = instructions >
+        <button id="start-button">Start Game</button>
+        <h1>Instructions</h1>
+        <h3>Use the left and right arrows to control the spaceship <br>
+             and use the spacebar to shoot the aliens!</h3>
     </div>
 
     <script src="./app.js"></script>
