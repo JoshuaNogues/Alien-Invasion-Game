@@ -65,12 +65,12 @@ class Projectile {
 class Alien {
   constructor(){
     this.position = {
-      x: 100,
-      y: 100
+      x: Math.random() * 500,
+      y: 0
     }
     
     this.velocity = {
-      x: 0,
+      y: 0,
     }
     
     const alien = new Image()
@@ -91,7 +91,7 @@ class Alien {
     update(){
 
       this.draw()
-      this.position.x += this.velocity.x
+      this.position.y += this.velocity.y
     }
 }
 
