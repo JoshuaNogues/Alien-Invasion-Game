@@ -54,11 +54,30 @@ addEventListener('keydown', e => {
   switch(e.keyCode){
     case 37:
       player.velocity.x = -3.5
+      
       break
     case 39:
       player.velocity.x = +3.5
+      
       break
     case 32:
+      
+      break
+  }
+})
+
+addEventListener('keyup', e => {
+  switch(e.keyCode){
+    case 37:
+      player.velocity.x = 0
+      
+      break
+    case 39:
+      player.velocity.x = 0
+      
+      break
+    case 32:
+      
       break
   }
 })
