@@ -111,14 +111,13 @@ const keys = {
     pressed: false
   }
 }
-//alien spawn rate
-setInterval(()=>{
-  aliens.push(new Alien())
-}, 2000)
+
 
 //animation loop function
 function animationLoop() {
-  requestAnimationFrame(animationLoop)
+  // if (!gameOn) {
+  //   return;
+  // }
   player.update()
   projectiles.forEach((projectile, index) => {
     if(projectile.position.y > canvas.height){
@@ -144,7 +143,7 @@ function animationLoop() {
 
 }
 
-animationLoop()
+
 
 addEventListener('keydown', ({key}) => {
   switch(key){
@@ -179,16 +178,25 @@ addEventListener('keyup', ({key}) => {
       player.velocity.x = 3.5
       keys.ArrowRight.pressed = false
       break
-    case ' ':
-      break
   }
 })
 
+const startButton = document.getElementById("start-button");
+let gameOn = false;
 
-window.onload = () => {
-  document.getElementById('start-button').onclick = () => {
-    if (gameOn === false) {
-      startGame();
-    }
+let alienId;
+let startGameId;
+
+startButton.addEventListener("click", function() {
+  gameOn = true;
+  clearInterval(alienId)
+  clearInterval(startGameId)
+  if(gameOn) {
+    alienId = setInterval(()=>{
+      aliens.push(new Alien())
+    }, 3000)
+    startGameId = setInterval(()=>{
+      animationLoop()
+    }, 8)
   }
-}
+});
