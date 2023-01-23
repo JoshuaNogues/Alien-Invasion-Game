@@ -4,12 +4,6 @@ const ctx = canvas.getContext('2d')
 // const background = new Image()
 // background.src = './images/background.gif'
 
-const ship = new Image()
-ship.src = './images/spaceship.png'
-
-const aliens = new Image()
-aliens.src = './images/sci-fi.png'
-
 const bullets = new Image()
 bullets.src = './images/bullets.png'
 
@@ -17,21 +11,27 @@ class Player {
   constructor(){
     this.position = {
       x: 235,
-      y: 425
+      y: 435
     }
-
+    
     this.velocity = {
       x: 0,
     }
+    
+    const ship = new Image()
+    ship.src = './images/spaceship.png'
+    ship.onload = () => {
+      this.ship = ship
+      this.width = 25
+      this.height = 25
+    }
 
-    this.ship = ship
-    this.width = 25
-    this.height = 25
   }
 
     draw() {
       // ctx.fillStyle = 'red'
       // ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
+      if(this.ship)
       ctx.drawImage(this.ship, this.position.x, this.position.y, this.width, this.height)
     }
 
@@ -62,10 +62,43 @@ class Projectile {
 
 }
 
+class Alien {
+  constructor(){
+    this.position = {
+      x: 100,
+      y: 100
+    }
+    
+    this.velocity = {
+      x: 0,
+    }
+    
+    const alien = new Image()
+    alien.src = './images/sci-fi.png'
+    alien.onload = () => {
+      this.alien = alien
+      this.width = 25
+      this.height = 25
+    }
+
+  }
+
+    draw() {
+      if(this.alien)
+      ctx.drawImage(this.alien, this.position.x, this.position.y, this.width, this.height)
+    }
+
+    update(){
+
+      this.draw()
+      this.position.x += this.velocity.x
+    }
+}
+
 
 const player = new Player()
-player.draw()
 const projectiles = []
+const aliens = new Alien()
 
 const keys = {
   ArrowLeft: {
@@ -83,6 +116,7 @@ const keys = {
 function animationLoop() {
   requestAnimationFrame(animationLoop)
   player.update()
+  aliens.update()
   projectiles.forEach((projectile, index) => {
     if(projectile.position.y > canvas.height){
       projectiles.splice(index, 1)
