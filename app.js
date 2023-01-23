@@ -10,6 +10,9 @@ ship.src = './images/spaceship.png'
 const aliens = new Image()
 aliens.src = './images/sci-fi.png'
 
+const bullets = new Image()
+bullets.src = './images/bullets.png'
+
 class Player {
   constructor(){
     this.position = {
@@ -39,45 +42,101 @@ class Player {
     }
 }
 
+class Projectile {
+  constructor({position, velocity}) {
+    this.position = position
+    this.velocity = velocity
+    this.bullets = bullets
+    this.width = 50
+    this.height = 50
+  }
+  draw(){
+    ctx.drawImage(this.bullets, this.position.x, this.position.y, this.width, this.height)
+  }
+
+  update(){
+    this.draw()
+    this.position.x += this.velocity.x
+    this.position.y += this.velocity.y
+  }
+
+}
+
+
 const player = new Player()
 player.draw()
+const projectiles = []
+
+const keys = {
+  ArrowLeft: {
+    pressed: false
+  },
+  ArrowRight: {
+    pressed: false
+  },
+  space: {
+    pressed: false
+  }
+}
 
 //animation loop function
 function animationLoop() {
   requestAnimationFrame(animationLoop)
   player.update()
+  projectiles.forEach((projectile, index) => {
+    if(projectile.position.y > canvas.height){
+      projectiles.splice(index, 1)
+    } else {
+      projectile.update()
+    }
+  })
+
+  if (keys.ArrowLeft.pressed === true && player.position.x >= 1){
+    player.velocity.x = -3.5
+  } else if (keys.ArrowRight.pressed === true && player.position.x + player.width <= canvas.width) {
+    player.velocity.x = 3.5
+  } else {
+    player.velocity.x = 0
+  }
+
 }
 
 animationLoop()
 
-addEventListener('keydown', e => {
-  switch(e.keyCode){
-    case 37:
-      player.velocity.x = -3.5
-      
+addEventListener('keydown', ({key}) => {
+  switch(key){
+    case 'ArrowLeft':
+      keys.ArrowLeft.pressed = true
       break
-    case 39:
-      player.velocity.x = +3.5
-      
+    case 'ArrowRight':
+      keys.ArrowRight.pressed = true
       break
-    case 32:
-      
+    case ' ':
+      projectiles.push(new Projectile({
+        position: {
+          x: player.position.x + -12.5,
+          y: player.position.y - 15 
+        },
+        velocity: {
+          x: 0,
+          y: -5
+        }
+      }))
       break
   }
 })
 
-addEventListener('keyup', e => {
-  switch(e.keyCode){
-    case 37:
-      player.velocity.x = 0
-      
+addEventListener('keyup', ({key}) => {
+  switch(key){
+    case 'ArrowLeft':
+      player.velocity.x = -3.5
+      keys.ArrowLeft.pressed = false
       break
-    case 39:
-      player.velocity.x = 0
-      
+    case 'ArrowRight':
+      player.velocity.x = 3.5
+      keys.ArrowRight.pressed = false
       break
-    case 32:
-      
+    case ' ':
       break
   }
 })
