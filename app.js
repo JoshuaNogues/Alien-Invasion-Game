@@ -140,10 +140,10 @@ function animationLoop() {
 }
 
 
-let alienSpawnInterval = 1000; // Initial spawn rate of aliens
+let alienSpawnInterval = 1500; // Initial spawn rate of aliens
 let alienVelocity = 1; // Initial velocity of aliens
 const maxAlienVelocity = 3;
-const minAlienSpawnInterval = 200;
+const minAlienSpawnInterval = 500;
 
 function checkCollision() {
     for (let i = 0; i < projectiles.length; i++) {
