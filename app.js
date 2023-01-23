@@ -68,11 +68,9 @@ class Alien {
       x: Math.random() * 500,
       y: 0
     }
-    
     this.velocity = {
-      y: 1,
+      y: alienVelocity,
     }
-    
     const alien = new Image()
     alien.src = './images/sci-fi.png'
     alien.onload = () => {
@@ -80,7 +78,6 @@ class Alien {
       this.width = 25
       this.height = 25
     }
-
   }
 
     draw() {
@@ -89,11 +86,11 @@ class Alien {
     }
 
     update(){
-
       this.draw()
       this.position.y += this.velocity.y
     }
 }
+
 
 
 const player = new Player()
@@ -115,9 +112,6 @@ const keys = {
 
 //animation loop function
 function animationLoop() {
-  // if (!gameOn) {
-  //   return;
-  // }
   player.update()
   projectiles.forEach((projectile, index) => {
     if(projectile.position.y > canvas.height){
@@ -127,6 +121,8 @@ function animationLoop() {
     }
   })
 
+
+  checkCollision()
 
   aliens.forEach((alien)=> {
     alien.draw()
@@ -143,6 +139,48 @@ function animationLoop() {
 
 }
 
+
+let alienSpawnInterval = 1000; // Initial spawn rate of aliens
+let alienVelocity = 1; // Initial velocity of aliens
+const maxAlienVelocity = 3;
+const minAlienSpawnInterval = 200;
+
+function checkCollision() {
+    for (let i = 0; i < projectiles.length; i++) {
+        for (let j = 0; j < aliens.length; j++) {
+            // check if the bounding boxes of the projectiles and aliens overlap
+            if (projectiles[i].position.x < aliens[j].position.x + aliens[j].width &&
+                projectiles[i].position.x + projectiles[i].width > aliens[j].position.x &&
+                projectiles[i].position.y < aliens[j].position.y + aliens[j].height &&
+                projectiles[i].position.y + projectiles[i].height > aliens[j].position.y) {
+
+                // get the image data of the projectiles and aliens at the coordinates of the collision
+                let projData = ctx.getImageData(projectiles[i].position.x, projectiles[i].position.y, projectiles[i].width, projectiles[i].height);
+                let alienData = ctx.getImageData(aliens[j].position.x, aliens[j].position.y, aliens[j].width, aliens[j].height);
+
+                // check if any of the pixels of the projectiles and aliens overlap
+                for (let p = 0; p < projData.data.length; p += 4) {
+                    for (let a = 0; a < alienData.data.length; a += 4) {
+                        if (projData.data[p + 3] !== 0 && alienData.data[a + 3] !== 0) {
+                            // collision detected
+                            projectiles.splice(i, 1);
+                            aliens.splice(j, 1);
+                            i--;
+                            j--;
+                            if (alienVelocity < maxAlienVelocity) {
+                                alienVelocity += 0.025; // Increase the velocity of new aliens by 0.1
+                            }
+                            if(alienSpawnInterval > minAlienSpawnInterval){
+                                alienSpawnInterval -= 100; // Decrease the spawn interval of new aliens by 100ms
+                            }
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 
 addEventListener('keydown', ({key}) => {
@@ -192,9 +230,9 @@ startButton.addEventListener("click", function() {
   clearInterval(alienId)
   clearInterval(startGameId)
   if(gameOn) {
-    alienId = setInterval(()=>{
-      aliens.push(new Alien())
-    }, 3000)
+    alienId = setInterval(()=> {
+      aliens.push(new Alien());
+  }, alienSpawnInterval);
     startGameId = setInterval(()=>{
       animationLoop()
     }, 8)
