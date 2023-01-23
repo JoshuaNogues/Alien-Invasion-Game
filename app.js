@@ -70,7 +70,7 @@ class Alien {
     }
     
     this.velocity = {
-      y: 0,
+      y: 1,
     }
     
     const alien = new Image()
@@ -98,7 +98,7 @@ class Alien {
 
 const player = new Player()
 const projectiles = []
-const aliens = new Alien()
+const aliens = []
 
 const keys = {
   ArrowLeft: {
@@ -111,12 +111,15 @@ const keys = {
     pressed: false
   }
 }
+//alien spawn rate
+setInterval(()=>{
+  aliens.push(new Alien())
+}, 2000)
 
 //animation loop function
 function animationLoop() {
   requestAnimationFrame(animationLoop)
   player.update()
-  aliens.update()
   projectiles.forEach((projectile, index) => {
     if(projectile.position.y > canvas.height){
       projectiles.splice(index, 1)
@@ -124,6 +127,12 @@ function animationLoop() {
       projectile.update()
     }
   })
+
+
+  aliens.forEach((alien)=> {
+    alien.draw()
+    alien.update()})
+  
 
   if (keys.ArrowLeft.pressed === true && player.position.x >= 1){
     player.velocity.x = -3.5
