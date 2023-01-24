@@ -109,6 +109,7 @@ const keys = {
   }
 }
 
+let lives = 3; // initial lives
 
 //animation loop function
 function animationLoop() {
@@ -128,6 +129,55 @@ function animationLoop() {
 
 
   checkCollision()
+
+  checkAlienCollision();
+
+if (aliensPassedPlayer() || aliensCollideWithPlayer()) {
+    lives = lives - 1; // Decrement lives
+}
+
+if (lives <= 0) {
+    ctx.fillStyle = "white";
+    ctx.font = "30px Black Ops One";
+    ctx.fillText("Game Over", canvas.width/2 - 90, canvas.height/2);
+    clearInterval(intervalId); // Stop animation loop
+} else {
+    ctx.fillStyle = "white";
+    ctx.font = "18px Black Ops One";
+    ctx.fillText("Lives: " + lives, 420, 480);
+}
+
+function checkAlienCollision() {
+    aliens.forEach((alien, index) => {
+        if (alien.position.y >= canvas.height || aliensCollideWithPlayer()) {
+            aliens.splice(index, 1);
+            lives = lives - 1;
+        }
+    });
+}
+
+function aliensPassedPlayer() {
+    let passed = false;
+    aliens.forEach((alien) => {
+        if (alien.position.y === player.position.y) {
+            passed = true;
+        }
+    });
+    return passed;
+}
+
+function aliensCollideWithPlayer() {
+    let collision = false;
+    aliens.forEach((alien) => {
+        if (alien.position.x < player.position.x + player.width &&
+            alien.position.x + alien.width > player.position.x &&
+            alien.position.y < player.position.y + player.height &&
+            alien.height + alien.position.y > player.position.y) {
+            collision = true;
+        }
+    });
+    return collision;
+}
 
   aliens.forEach((alien)=> {
     alien.draw()
@@ -175,7 +225,7 @@ function checkCollision() {
                             j--;
                             score += 10; // Increment the score by 10
                             if (alienVelocity < maxAlienVelocity) {
-                                alienVelocity += 0.025; // Increase the velocity of new aliens by 0.1
+                                alienVelocity += 0.025; // Increase the velocity of new aliens by 0.025
                             }
                             if(alienSpawnInterval > minAlienSpawnInterval){
                                 alienSpawnInterval -= 100; // Decrease the spawn interval of new aliens by 100ms
