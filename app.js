@@ -91,11 +91,41 @@ class Alien {
     }
 }
 
+class Heart {
+  constructor(){
+    this.position = {
+      x: Math.random() * 500,
+      y: 0
+    }
+    this.velocity = {
+      y: 2.5,
+    }
+    const heart = new Image()
+    heart.src = './images/heart.png'
+    heart.onload = () => {
+      this.heart = heart
+      this.width = 25
+      this.height = 25
+    }
+  }
+
+    draw() {
+      if(this.heart)
+      ctx.drawImage(this.heart, this.position.x, this.position.y, this.width, this.height)
+    }
+
+    update(){
+      this.draw()
+      this.position.y += this.velocity.y
+    }
+}
+
 
 
 const player = new Player()
 const projectiles = []
 const aliens = []
+const hearts = []
 
 const keys = {
   ArrowLeft: {
@@ -179,6 +209,8 @@ function animationLoop() {
 
   checkAlienCollision();
 
+  checkHeartCollision();
+
 if (aliensPassedPlayer() || aliensCollideWithPlayer()) {
     lives = lives - 1; // Decrement lives
 }
@@ -226,9 +258,34 @@ function aliensCollideWithPlayer() {
     return collision;
 }
 
+function heartsCollideWithPlayer() {
+  let heartCollision = false;
+  hearts.forEach((heart) => {
+      if (heart.position.x < player.position.x + player.width &&
+          heart.position.x + heart.width > player.position.x &&
+          heart.position.y < player.position.y + player.height &&
+          heart.height + heart.position.y > player.position.y) {
+          heartCollision = true;
+      }
+  });
+  return heartCollision;
+}
+
+function checkHeartCollision() {
+  hearts.forEach((heart, index) => {
+      if (heart.position.y >= canvas.height || heartsCollideWithPlayer()) {
+          hearts.splice(index, 1);
+          lives = lives + 1;
+      }
+  });
+}
+
   aliens.forEach((alien)=> {
     alien.draw()
     alien.update()})
+
+    hearts.forEach((heart)=> {
+      heart.update()})
   
 
   if (keys.ArrowLeft.pressed === true && player.position.x >= 1){
@@ -326,8 +383,13 @@ addEventListener('keyup', ({key}) => {
 const startButton = document.getElementById("start-button");
 let gameOn = false;
 
+
+
 let alienId;
 let startGameId;
+let heartId;
+
+let heartSpawnInterval = 60000
 
 startButton.addEventListener("click", function() {
   gameOn = true;
@@ -337,6 +399,9 @@ startButton.addEventListener("click", function() {
     alienId = setInterval(()=> {
       aliens.push(new Alien());
   }, alienSpawnInterval);
+      heartId = setInterval(()=>{
+        hearts.push(new Heart())
+      }, heartSpawnInterval)
     startGameId = setInterval(()=>{
       animationLoop()
     }, 8)
