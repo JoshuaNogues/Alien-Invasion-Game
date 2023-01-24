@@ -11,7 +11,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: #8C52FF;
+    background-image: url(./images/body-background.png);
 }
 
 canvas {
@@ -20,7 +20,7 @@ canvas {
 }
 
 .logo-img {
-    width: 450px;
+    width: 500px;
 }
 
 #start-button {
@@ -35,6 +35,7 @@ canvas {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: #8c52ff ;
 }
 
 #instructions {
@@ -43,6 +44,7 @@ canvas {
     align-items: center;
     flex-direction: column;
     text-align: center;
+    background-color: #8c52ff ;
 }
 
 h1 {

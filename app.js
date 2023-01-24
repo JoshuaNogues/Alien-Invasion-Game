@@ -158,7 +158,7 @@ function animationLoop() {
   } if(score === 900){
     ctx.fillStyle = "white";
     ctx.font = "30px Black Ops One";
-    ctx.fillText("Level 10! Max LVL", canvas.width/2 - 70, canvas.height/2)
+    ctx.fillText("Level 10! Max LVL!", canvas.width/2 - 90, canvas.height/2)
   } 
 
 
