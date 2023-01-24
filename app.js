@@ -113,6 +113,11 @@ const keys = {
 //animation loop function
 function animationLoop() {
   player.update()
+
+  ctx.fillStyle = "white";
+  ctx.font = "18px Black Ops One";
+  ctx.fillText("Score: " + score, 10, 480); //score box
+
   projectiles.forEach((projectile, index) => {
     if(projectile.position.y > canvas.height){
       projectiles.splice(index, 1)
@@ -141,9 +146,10 @@ function animationLoop() {
 
 
 let alienSpawnInterval = 1500; // Initial spawn rate of aliens
-let alienVelocity = 1; // Initial velocity of aliens
+let alienVelocity = .5; // Initial velocity of aliens
 const maxAlienVelocity = 3;
 const minAlienSpawnInterval = 500;
+let score = 0; //initial score
 
 function checkCollision() {
     for (let i = 0; i < projectiles.length; i++) {
@@ -167,6 +173,7 @@ function checkCollision() {
                             aliens.splice(j, 1);
                             i--;
                             j--;
+                            score += 10; // Increment the score by 10
                             if (alienVelocity < maxAlienVelocity) {
                                 alienVelocity += 0.025; // Increase the velocity of new aliens by 0.1
                             }
