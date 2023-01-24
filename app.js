@@ -119,6 +119,53 @@ function animationLoop() {
   ctx.font = "18px Black Ops One";
   ctx.fillText("Score: " + score, 10, 480); //score box
 
+  if(score === 0){            // levels
+    ctx.fillStyle = "white";
+    ctx.font = "30px Black Ops One";
+    ctx.fillText("Level 1", canvas.width/2 - 70, canvas.height/2)
+  } if(score === 100){
+    ctx.fillStyle = "white";
+    ctx.font = "30px Black Ops One";
+    ctx.fillText("Level 2", canvas.width/2 - 70, canvas.height/2)
+  } if(score === 200){
+    ctx.fillStyle = "white";
+    ctx.font = "30px Black Ops One";
+    ctx.fillText("Level 3", canvas.width/2 - 70, canvas.height/2)
+  } if(score === 300){
+    ctx.fillStyle = "white";
+    ctx.font = "30px Black Ops One";
+    ctx.fillText("Level 4", canvas.width/2 - 70, canvas.height/2)
+  } if(score === 400){
+    ctx.fillStyle = "white";
+    ctx.font = "30px Black Ops One";
+    ctx.fillText("Level 5", canvas.width/2 - 70, canvas.height/2)
+  } if(score === 500){
+    ctx.fillStyle = "white";
+    ctx.font = "30px Black Ops One";
+    ctx.fillText("Level 6", canvas.width/2 - 70, canvas.height/2)
+  } if(score === 600){
+    ctx.fillStyle = "white";
+    ctx.font = "30px Black Ops One";
+    ctx.fillText("Level 7", canvas.width/2 - 70, canvas.height/2)
+  } if(score === 700){
+    ctx.fillStyle = "white";
+    ctx.font = "30px Black Ops One";
+    ctx.fillText("Level 8", canvas.width/2 - 70, canvas.height/2)
+  } if(score === 800){
+    ctx.fillStyle = "white";
+    ctx.font = "30px Black Ops One";
+    ctx.fillText("Level 9", canvas.width/2 - 70, canvas.height/2)
+  } if(score === 900){
+    ctx.fillStyle = "white";
+    ctx.font = "30px Black Ops One";
+    ctx.fillText("Level 10! Max LVL", canvas.width/2 - 70, canvas.height/2)
+  } 
+
+
+
+
+
+
   projectiles.forEach((projectile, index) => {
     if(projectile.position.y > canvas.height){
       projectiles.splice(index, 1)
