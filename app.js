@@ -273,7 +273,7 @@ function heartsCollideWithPlayer() {
 
 function checkHeartCollision() {
   hearts.forEach((heart, index) => {
-      if (heart.position.y >= canvas.height || heartsCollideWithPlayer()) {
+      if (heart.position.y >= canvas.height && heartsCollideWithPlayer()) {
           hearts.splice(index, 1);
           lives = lives + 1;
       }
