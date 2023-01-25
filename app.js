@@ -373,6 +373,10 @@ addEventListener('keyup', ({key}) => {
 const startButton = document.getElementById("start-button");
 let gameOn = false;
 
+window.addEventListener('click', ()=> {
+  document.getElementById('song').play()
+});
+
 let alienId;
 let startGameId;
 let heartId;
