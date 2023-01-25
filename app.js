@@ -273,7 +273,7 @@ function heartsCollideWithPlayer() {
 
 function checkHeartCollision() {
   hearts.forEach((heart, index) => {
-      if (heart.position.y >= canvas.height && heartsCollideWithPlayer()) {
+      if (heartsCollideWithPlayer()) {
           hearts.splice(index, 1);
           lives = lives + 1;
       }
@@ -389,7 +389,7 @@ let alienId;
 let startGameId;
 let heartId;
 
-let heartSpawnInterval = 45000
+let heartSpawnInterval = 10000
 
 startButton.addEventListener("click", function() {
   gameOn = true;
