@@ -120,8 +120,6 @@ class Heart {
     }
 }
 
-
-
 const player = new Player()
 const projectiles = []
 const aliens = []
@@ -191,11 +189,6 @@ function animationLoop() {
     ctx.fillText("Level 10! Max LVL!", canvas.width/2 - 90, canvas.height/2)
   } 
 
-
-
-
-
-
   projectiles.forEach((projectile, index) => {
     if(projectile.position.y > canvas.height){
       projectiles.splice(index, 1)
@@ -203,7 +196,6 @@ function animationLoop() {
       projectile.update()
     }
   })
-
 
   checkCollision()
 
@@ -298,7 +290,6 @@ function checkHeartCollision() {
 
 }
 
-
 let alienSpawnInterval = 1500; // Initial spawn rate of aliens
 let alienVelocity = .5; // Initial velocity of aliens
 const maxAlienVelocity = 3;
@@ -343,7 +334,6 @@ function checkCollision() {
     }
 }
 
-
 addEventListener('keydown', ({key}) => {
   switch(key){
     case 'ArrowLeft':
@@ -383,13 +373,11 @@ addEventListener('keyup', ({key}) => {
 const startButton = document.getElementById("start-button");
 let gameOn = false;
 
-
-
 let alienId;
 let startGameId;
 let heartId;
 
-let heartSpawnInterval = 10000
+let heartSpawnInterval = 60000
 
 startButton.addEventListener("click", function() {
   gameOn = true;
