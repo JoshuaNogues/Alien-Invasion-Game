@@ -389,7 +389,7 @@ let alienId;
 let startGameId;
 let heartId;
 
-let heartSpawnInterval = 5000
+let heartSpawnInterval = 45000
 
 startButton.addEventListener("click", function() {
   gameOn = true;
