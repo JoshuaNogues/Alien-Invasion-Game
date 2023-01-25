@@ -373,8 +373,16 @@ addEventListener('keyup', ({key}) => {
 const startButton = document.getElementById("start-button");
 let gameOn = false;
 
+//background music
 window.addEventListener('click', ()=> {
-  document.getElementById('song').play()
+  document.getElementById('song').play() 
+});
+
+//pew sound effect
+document.addEventListener('keydown', function(e) {
+  if (e.keyCode === 32) {
+    document.getElementById('pew').play();
+  }
 });
 
 let alienId;
