@@ -218,6 +218,25 @@ if (lives <= 0) {
     ctx.fillText("Lives: " + lives, 420, 480);
 }
 
+
+aliens.forEach((alien)=> {
+  alien.draw()
+  alien.update()})
+  
+  hearts.forEach((heart)=> {
+    heart.update()})
+    
+    
+    if (keys.ArrowLeft.pressed === true && player.position.x >= 1){
+      player.velocity.x = -3.5
+  } else if (keys.ArrowRight.pressed === true && player.position.x + player.width <= canvas.width) {
+    player.velocity.x = 3.5
+  } else {
+    player.velocity.x = 0
+  }
+
+} // end of animation loop
+
 function checkAlienCollision() {
     aliens.forEach((alien, index) => {
         if (alien.position.y >= canvas.height || aliensCollideWithPlayer()) {
@@ -272,24 +291,6 @@ function checkHeartCollision() {
   });
 }
 
-  aliens.forEach((alien)=> {
-    alien.draw()
-    alien.update()})
-
-    hearts.forEach((heart)=> {
-      heart.update()})
-  
-
-  if (keys.ArrowLeft.pressed === true && player.position.x >= 1){
-    player.velocity.x = -3.5
-  } else if (keys.ArrowRight.pressed === true && player.position.x + player.width <= canvas.width) {
-    player.velocity.x = 3.5
-  } else {
-    player.velocity.x = 0
-  }
-
-}
-
 let alienSpawnInterval = 1500; // Initial spawn rate of aliens
 let alienVelocity = .5; // Initial velocity of aliens
 const maxAlienVelocity = 3;
@@ -305,12 +306,12 @@ function checkCollision() {
                 projectiles[i].position.y < aliens[j].position.y + aliens[j].height &&
                 projectiles[i].position.y + projectiles[i].height > aliens[j].position.y) {
 
-                // get the image data of the projectiles and aliens at the coordinates of the collision
-                let projData = ctx.getImageData(projectiles[i].position.x, projectiles[i].position.y, projectiles[i].width, projectiles[i].height);
-                let alienData = ctx.getImageData(aliens[j].position.x, aliens[j].position.y, aliens[j].width, aliens[j].height);
-
-                // check if any of the pixels of the projectiles and aliens overlap
-                for (let p = 0; p < projData.data.length; p += 4) {
+                  // get the image data of the projectiles and aliens at the coordinates of the collision
+                  let projData = ctx.getImageData(projectiles[i].position.x, projectiles[i].position.y, projectiles[i].width, projectiles[i].height);
+                  let alienData = ctx.getImageData(aliens[j].position.x, aliens[j].position.y, aliens[j].width, aliens[j].height);
+                  
+                  // check if any of the pixels of the projectiles and aliens overlap
+                  for (let p = 0; p < projData.data.length; p += 4) {
                     for (let a = 0; a < alienData.data.length; a += 4) {
                         if (projData.data[p + 3] !== 0 && alienData.data[a + 3] !== 0) {
                             // collision detected
@@ -321,11 +322,11 @@ function checkCollision() {
                             score += 10; // Increment the score by 10
                             if (alienVelocity < maxAlienVelocity) {
                                 alienVelocity += 0.025; // Increase the velocity of new aliens by 0.025
-                            }
-                            if(alienSpawnInterval > minAlienSpawnInterval){
+                              }
+                              if(alienSpawnInterval > minAlienSpawnInterval){
                                 alienSpawnInterval -= 100; // Decrease the spawn interval of new aliens by 100ms
-                            }
-                            return;
+                              }
+                              return;
                         }
                     }
                 }
