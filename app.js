@@ -113,6 +113,12 @@ class Boss {
     draw() {
       if(this.alien)
       ctx.drawImage(this.alien, this.position.x, this.position.y, this.width, this.height)
+
+       //health bar
+       ctx.fillStyle = 'red'
+       ctx.fillRect(this.position.x, this.position.y - 10, this.width, 5)
+       ctx.fillStyle = 'green'
+       ctx.fillRect(this.position.x, this.position.y - 10, this.width * this.health / 100, 5)
     }
 
     update(){
@@ -499,6 +505,6 @@ startButton.addEventListener("click", function() {
     startGameId = setInterval(()=>{
       animationLoop()
     }, 8)
-    bossId = setInterval(spawnBoss, 10000)
+    bossId = setInterval(spawnBoss, 15000)
   }
 });
