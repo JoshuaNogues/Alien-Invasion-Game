@@ -91,6 +91,36 @@ class Alien {
     }
 }
 
+class Boss {
+  constructor(){
+    this.position = {
+      x: Math.random() * 500,
+      y: 0
+    }
+    this.velocity = {
+      y: .25,
+    }
+    const alien = new Image()
+    alien.src = './images/sci-fi.png'
+    alien.onload = () => {
+      this.alien = alien
+      this.width = 75
+      this.height = 75
+    }
+    this.health = 100;
+  }
+
+    draw() {
+      if(this.alien)
+      ctx.drawImage(this.alien, this.position.x, this.position.y, this.width, this.height)
+    }
+
+    update(){
+      this.draw()
+      this.position.y += this.velocity.y
+    }
+}
+
 class Heart {
   constructor(){
     this.position = {
@@ -124,6 +154,7 @@ const player = new Player()
 const projectiles = []
 const aliens = []
 const hearts = []
+const bosses = []
 
 const keys = {
   ArrowLeft: {
@@ -203,6 +234,8 @@ function animationLoop() {
 
   checkHeartCollision();
 
+  checkBossCollision();
+
 if (aliensPassedPlayer() || aliensCollideWithPlayer()) {
     lives = lives - 1; // Decrement lives
 }
@@ -226,6 +259,8 @@ aliens.forEach((alien)=> {
   hearts.forEach((heart)=> {
     heart.update()})
     
+    bosses.forEach((boss)=> {
+      boss.update()})
     
     if (keys.ArrowLeft.pressed === true && player.position.x >= 1){
       player.velocity.x = -3.5
@@ -239,7 +274,7 @@ aliens.forEach((alien)=> {
 
 function checkAlienCollision() {
     aliens.forEach((alien, index) => {
-        if (alien.position.y >= canvas.height || aliensCollideWithPlayer()) {
+        if (alien.position.y >= canvas.height || aliensCollideWithPlayer() || bossCollideWithPlayer()) {
             aliens.splice(index, 1);
             lives = lives - 1;
         }
@@ -291,6 +326,19 @@ function checkHeartCollision() {
   });
 }
 
+function bossCollideWithPlayer() {
+  let collision = false;
+  bosses.forEach((boss) => {
+      if (boss.position.x < player.position.x + player.width &&
+          boss.position.x + boss.width > player.position.x &&
+          boss.position.y < player.position.y + player.height &&
+          boss.height + boss.position.y > player.position.y) {
+          collision = true;
+      }
+  });
+  return collision;
+}
+
 let alienSpawnInterval = 1500; // Initial spawn rate of aliens
 let alienVelocity = .5; // Initial velocity of aliens
 const maxAlienVelocity = 3;
@@ -334,6 +382,50 @@ function checkCollision() {
         }
     }
 }
+
+function checkBossCollision() {
+  for (let i = 0; i < projectiles.length; i++) {
+      for (let j = 0; j < bosses.length; j++) {
+          // check if the bounding boxes of the projectiles and aliens overlap
+          if (projectiles[i].position.x < bosses[j].position.x + bosses[j].width &&
+              projectiles[i].position.x + projectiles[i].width > bosses[j].position.x &&
+              projectiles[i].position.y < bosses[j].position.y + bosses[j].height &&
+              projectiles[i].position.y + projectiles[i].height > bosses[j].position.y) {
+
+                // get the image data of the projectiles and bosses at the coordinates of the collision
+                let projData = ctx.getImageData(projectiles[i].position.x, projectiles[i].position.y, projectiles[i].width, projectiles[i].height);
+                let bossData = ctx.getImageData(bosses[j].position.x, bosses[j].position.y, bosses[j].width, bosses[j].height);
+                
+                // check if any of the pixels of the projectiles and bosses overlap
+                for (let p = 0; p < projData.data.length; p += 4) {
+                  for (let a = 0; a < bossData.data.length; a += 4) {
+                      if (projData.data[p + 3] !== 0 && bossData.data[a + 3] !== 0) {
+                          // collision detected
+                          projectiles.splice(i, 1);
+                          bosses[j].health -= 10;
+                          console.log(bosses[j].health)
+                          if(bosses[j].health === 0){
+                            bosses.splice(j, 1);
+                          }
+                          i--;
+                          j--;
+                          score += 5; // Increment the score by 2
+                            return;
+                      }
+                  }
+              }
+          }
+      }
+  }
+}
+
+function spawnBoss() {
+  if (score >= 400) {
+      let newBoss = new Boss();
+      bosses.push(newBoss);
+  }
+}
+ 
 
 addEventListener('keydown', ({key}) => {
   switch(key){
@@ -386,6 +478,7 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
+let bossId;
 let alienId;
 let startGameId;
 let heartId;
@@ -406,5 +499,6 @@ startButton.addEventListener("click", function() {
     startGameId = setInterval(()=>{
       animationLoop()
     }, 8)
+    bossId = setInterval(spawnBoss, 10000)
   }
 });
