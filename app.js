@@ -406,7 +406,7 @@ function bossCollideWithPlayer() {
   return collision;
 }
 
-let alienSpawnInterval = 1200; // Initial spawn rate of aliens
+let alienSpawnInterval = 1500; // Initial spawn rate of aliens
 let alienVelocity = 0.75; // Initial velocity of aliens
 const maxAlienVelocity = 3;
 const minAlienSpawnInterval = 500;
@@ -514,6 +514,7 @@ function spawnBoss() {
   if (score >= 200) {
     let newBoss = new Boss();
     bosses.push(newBoss);
+    console.log(bosses)
   }
 }
 
@@ -581,6 +582,8 @@ startButton.addEventListener("click", function () {
   gameOn = true;
   clearInterval(alienId);
   clearInterval(startGameId);
+  clearInterval(bossId);
+  clearInterval(heartId);
   if (gameOn) {
     alienId = setInterval(() => {
       aliens.push(new Alien());
