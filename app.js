@@ -297,7 +297,7 @@ function animationLoop() {
     ctx.fillStyle = "white";
     ctx.font = "30px Black Ops One";
     ctx.fillText("Game Over", canvas.width / 2 - 90, canvas.height / 2);
-    clearInterval(intervalId); // Stop animation loop
+    clearInterval(startGameId); // Stop animation loop
   } else {
     ctx.fillStyle = "white";
     ctx.font = "18px Black Ops One";
@@ -510,14 +510,6 @@ function checkBossCollision() {
   }
 }
 
-function spawnBoss() {
-  if (score >= 200) {
-    let newBoss = new Boss();
-    bosses.push(newBoss);
-    console.log(bosses)
-  }
-}
-
 addEventListener("keydown", ({ key }) => {
   switch (key) {
     case "ArrowLeft":
@@ -576,14 +568,12 @@ let alienId;
 let startGameId;
 let heartId;
 
-let heartSpawnInterval = 60000;
+let heartSpawnInterval = 45000;
 
 startButton.addEventListener("click", function () {
   gameOn = true;
   clearInterval(alienId);
   clearInterval(startGameId);
-  clearInterval(bossId);
-  clearInterval(heartId);
   if (gameOn) {
     alienId = setInterval(() => {
       aliens.push(new Alien());
@@ -594,6 +584,11 @@ startButton.addEventListener("click", function () {
     startGameId = setInterval(() => {
       animationLoop();
     }, 8);
-    bossId = setInterval(spawnBoss, 18000);
+    bossId = setInterval(()=>{
+      if (score >= 200) {
+        let newBoss = new Boss();
+        bosses.push(newBoss);
+      }
+    }, 18000)
   }
 });
