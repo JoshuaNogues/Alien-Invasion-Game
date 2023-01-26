@@ -100,10 +100,10 @@ class Boss {
     this.velocity = {
       y: .25,
     }
-    const alien = new Image()
-    alien.src = './images/sci-fi.png'
-    alien.onload = () => {
-      this.alien = alien
+    const boss = new Image()
+    boss.src = './images/boss.png'
+    boss.onload = () => {
+      this.boss = boss
       this.width = 75
       this.height = 75
     }
@@ -111,8 +111,8 @@ class Boss {
   }
 
     draw() {
-      if(this.alien)
-      ctx.drawImage(this.alien, this.position.x, this.position.y, this.width, this.height)
+      if(this.boss)
+      ctx.drawImage(this.boss, this.position.x, this.position.y, this.width, this.height)
 
        //health bar
        ctx.fillStyle = 'red'
@@ -505,6 +505,6 @@ startButton.addEventListener("click", function() {
     startGameId = setInterval(()=>{
       animationLoop()
     }, 8)
-    bossId = setInterval(spawnBoss, 15000)
+    bossId = setInterval(spawnBoss, 20000)
   }
 });
