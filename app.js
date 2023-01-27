@@ -1,11 +1,21 @@
+const startButton = document.getElementById("start-button");
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
-
-// const background = new Image()
-// background.src = './images/background.gif'
-
 const bullets = new Image();
 bullets.src = "./images/bullets.png";
+const maxAlienVelocity = 3;
+const minAlienSpawnInterval = 500;
+
+let gameOn = false;
+let score = 0;
+let lives = 3;
+let bossId;
+let alienId;
+let startGameId;
+let heartId;
+let heartSpawnInterval = 45000;
+let alienSpawnInterval = 1500;
+let alienVelocity = 0.75;
 
 class Player {
   constructor() {
@@ -28,8 +38,6 @@ class Player {
   }
 
   draw() {
-    // ctx.fillStyle = 'red'
-    // ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
     if (this.ship)
       ctx.drawImage(
         this.ship,
@@ -207,79 +215,14 @@ const keys = {
   },
 };
 
-let lives = 3; // initial lives
-
-//animation loop function
 function animationLoop() {
   player.update();
 
-  ctx.fillStyle = "white";
-  ctx.font = "18px Black Ops One";
-  ctx.fillText("Score: " + score, 10, 480); //score box
+  updateAndDrawScore();
 
-  if (score === 0) {
-    // levels
-    ctx.fillStyle = "white";
-    ctx.font = "30px Black Ops One";
-    ctx.fillText("Level 1", canvas.width / 2 - 70, canvas.height / 2);
-  }
-  if (score === 100) {
-    ctx.fillStyle = "white";
-    ctx.font = "30px Black Ops One";
-    ctx.fillText("Level 2", canvas.width / 2 - 70, canvas.height / 2);
-  }
-  if (score === 200) {
-    ctx.fillStyle = "white";
-    ctx.font = "30px Black Ops One";
-    ctx.fillText("Level 3", canvas.width / 2 - 70, canvas.height / 2);
-  }
-  if (score === 300) {
-    ctx.fillStyle = "white";
-    ctx.font = "30px Black Ops One";
-    ctx.fillText("Level 4", canvas.width / 2 - 70, canvas.height / 2);
-  }
-  if (score === 400) {
-    ctx.fillStyle = "white";
-    ctx.font = "30px Black Ops One";
-    ctx.fillText("Level 5", canvas.width / 2 - 70, canvas.height / 2);
-  }
-  if (score === 500) {
-    ctx.fillStyle = "white";
-    ctx.font = "30px Black Ops One";
-    ctx.fillText("Level 6", canvas.width / 2 - 70, canvas.height / 2);
-  }
-  if (score === 600) {
-    ctx.fillStyle = "white";
-    ctx.font = "30px Black Ops One";
-    ctx.fillText("Level 7", canvas.width / 2 - 70, canvas.height / 2);
-  }
-  if (score === 700) {
-    ctx.fillStyle = "white";
-    ctx.font = "30px Black Ops One";
-    ctx.fillText("Level 8", canvas.width / 2 - 70, canvas.height / 2);
-  }
-  if (score === 800) {
-    ctx.fillStyle = "white";
-    ctx.font = "30px Black Ops One";
-    ctx.fillText("Level 9", canvas.width / 2 - 70, canvas.height / 2);
-  }
-  if (score === 900) {
-    ctx.fillStyle = "white";
-    ctx.font = "30px Black Ops One";
-    ctx.fillText(
-      "Level 10! Max LVL!",
-      canvas.width / 2 - 90,
-      canvas.height / 2
-    );
-  }
+  determineLevel();
 
-  projectiles.forEach((projectile, index) => {
-    if (projectile.position.y > canvas.height) {
-      projectiles.splice(index, 1);
-    } else {
-      projectile.update();
-    }
-  });
+  checkAndDrawProjectiles();
 
   checkCollision();
 
@@ -289,45 +232,53 @@ function animationLoop() {
 
   checkBossCollision();
 
-  if (aliensPassedPlayer() || aliensCollideWithPlayer()) {
-    lives = lives - 1; // Decrement lives
+  checkPlayerLostLife();
+
+  checkLoseCondition();
+
+  updateObjects();
+
+  controlPlayer();
+}
+
+function updateAndDrawScore() {
+  ctx.fillStyle = "white";
+  ctx.font = "18px Black Ops One";
+  ctx.fillText("Score: " + score, 10, 480);
+}
+
+function determineLevel() {
+  const levels = [
+    "Level 1",
+    "Level 2",
+    "Level 3",
+    "Level 4",
+    "Level 5",
+    "Level 6",
+    "Level 7",
+    "Level 8",
+    "Level 9",
+    "Level 10! Max LVL!",
+  ];
+
+  for (let i = 0; i < levels.length; i++) {
+    if (score === i * 100) {
+      ctx.fillStyle = "white";
+      ctx.font = "30px Black Ops One";
+      ctx.fillText(levels[i], canvas.width / 2 - 70, canvas.height / 2);
+    }
   }
+}
 
-  if (lives <= 0) {
-    ctx.fillStyle = "white";
-    ctx.font = "30px Black Ops One";
-    ctx.fillText("Game Over", canvas.width / 2 - 90, canvas.height / 2);
-    clearInterval(startGameId); // Stop animation loop
-  } else {
-    ctx.fillStyle = "white";
-    ctx.font = "18px Black Ops One";
-    ctx.fillText("Lives: " + lives, 420, 480);
-  }
-
-  aliens.forEach((alien) => {
-    alien.draw();
-    alien.update();
+function checkAndDrawProjectiles() {
+  projectiles.forEach((projectile, index) => {
+    if (projectile.position.y > canvas.height) {
+      projectiles.splice(index, 1);
+    } else {
+      projectile.update();
+    }
   });
-
-  hearts.forEach((heart) => {
-    heart.update();
-  });
-
-  bosses.forEach((boss) => {
-    boss.update();
-  });
-
-  if (keys.ArrowLeft.pressed === true && player.position.x >= 1) {
-    player.velocity.x = -3.5;
-  } else if (
-    keys.ArrowRight.pressed === true &&
-    player.position.x + player.width <= canvas.width
-  ) {
-    player.velocity.x = 3.5;
-  } else {
-    player.velocity.x = 0;
-  }
-} // end of animation loop
+}
 
 function checkAlienCollision() {
   aliens.forEach((alien, index) => {
@@ -405,12 +356,6 @@ function bossCollideWithPlayer() {
   });
   return collision;
 }
-
-let alienSpawnInterval = 1500; // Initial spawn rate of aliens
-let alienVelocity = 0.75; // Initial velocity of aliens
-const maxAlienVelocity = 3;
-const minAlienSpawnInterval = 500;
-let score = 0; //initial score
 
 function checkCollision() {
   for (let i = 0; i < projectiles.length; i++) {
@@ -510,6 +455,52 @@ function checkBossCollision() {
   }
 }
 
+function checkPlayerLostLife() {
+  if (aliensPassedPlayer() || aliensCollideWithPlayer()) {
+    lives = lives - 1;
+  }
+}
+
+function checkLoseCondition() {
+  if (lives <= 0) {
+    ctx.fillStyle = "white";
+    ctx.font = "30px Black Ops One";
+    ctx.fillText("Game Over", canvas.width / 2 - 90, canvas.height / 2);
+    clearInterval(startGameId); // Stop animation loop
+  } else {
+    ctx.fillStyle = "white";
+    ctx.font = "18px Black Ops One";
+    ctx.fillText("Lives: " + lives, 420, 480);
+  }
+}
+
+function updateObjects() {
+  aliens.forEach((alien) => {
+    alien.update();
+  });
+
+  hearts.forEach((heart) => {
+    heart.update();
+  });
+
+  bosses.forEach((boss) => {
+    boss.update();
+  });
+}
+
+function controlPlayer() {
+  if (keys.ArrowLeft.pressed === true && player.position.x >= 1) {
+    player.velocity.x = -3.5;
+  } else if (
+    keys.ArrowRight.pressed === true &&
+    player.position.x + player.width <= canvas.width
+  ) {
+    player.velocity.x = 3.5;
+  } else {
+    player.velocity.x = 0;
+  }
+}
+
 addEventListener("keydown", ({ key }) => {
   switch (key) {
     case "ArrowLeft":
@@ -531,6 +522,7 @@ addEventListener("keydown", ({ key }) => {
           },
         })
       );
+      document.getElementById("pew").play();
       break;
   }
 });
@@ -548,27 +540,9 @@ addEventListener("keyup", ({ key }) => {
   }
 });
 
-const startButton = document.getElementById("start-button");
-let gameOn = false;
-
-//background music
 window.addEventListener("click", () => {
   document.getElementById("song").play();
 });
-
-//pew sound effect
-document.addEventListener("keydown", function (e) {
-  if (e.keyCode === 32) {
-    document.getElementById("pew").play();
-  }
-});
-
-let bossId;
-let alienId;
-let startGameId;
-let heartId;
-
-let heartSpawnInterval = 45000;
 
 startButton.addEventListener("click", function () {
   gameOn = true;
@@ -584,11 +558,11 @@ startButton.addEventListener("click", function () {
     startGameId = setInterval(() => {
       animationLoop();
     }, 8);
-    bossId = setInterval(()=>{
+    bossId = setInterval(() => {
       if (score >= 200) {
         let newBoss = new Boss();
         bosses.push(newBoss);
       }
-    }, 18000)
+    }, 18000);
   }
 });
