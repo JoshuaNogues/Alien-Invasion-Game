@@ -544,10 +544,9 @@ window.addEventListener("click", () => {
   document.getElementById("song").play();
 });
 
-startButton.addEventListener("click", function () {
+startButton.addEventListener("mousedown", function () {
   gameOn = true;
-  clearInterval(alienId);
-  clearInterval(startGameId);
+
   if (gameOn) {
     alienId = setInterval(() => {
       aliens.push(new Alien());
@@ -555,14 +554,11 @@ startButton.addEventListener("click", function () {
     heartId = setInterval(() => {
       hearts.push(new Heart());
     }, heartSpawnInterval);
+    bossId = setInterval(() => {
+      bosses.push(new Boss());
+    }, 20000);
     startGameId = setInterval(() => {
       animationLoop();
     }, 8);
-    bossId = setInterval(() => {
-      if (score >= 200) {
-        let newBoss = new Boss();
-        bosses.push(newBoss);
-      }
-    }, 18000);
   }
 });
