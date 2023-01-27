@@ -2,7 +2,7 @@ const startButton = document.getElementById("start-button");
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const bullets = new Image();
-bullets.src = "./images/bullets.png";
+bullets.src = "images/bullets.png";
 const maxAlienVelocity = 3;
 const minAlienSpawnInterval = 500;
 
@@ -29,7 +29,7 @@ class Player {
     };
 
     const ship = new Image();
-    ship.src = "./images/spaceship.png";
+    ship.src = "images/spaceship.png";
     ship.onload = () => {
       this.ship = ship;
       this.width = 25;
@@ -90,7 +90,7 @@ class Alien {
       y: alienVelocity,
     };
     const alien = new Image();
-    alien.src = "./images/sci-fi.png";
+    alien.src = "images/sci-fi.png";
     alien.onload = () => {
       this.alien = alien;
       this.width = 25;
@@ -125,7 +125,7 @@ class Boss {
       y: 0.25,
     };
     const boss = new Image();
-    boss.src = "./images/boss.png";
+    boss.src = "images/boss.png";
     boss.onload = () => {
       this.boss = boss;
       this.width = 75;
@@ -172,7 +172,7 @@ class Heart {
       y: 2.5,
     };
     const heart = new Image();
-    heart.src = "./images/heart.png";
+    heart.src = "images/heart.png";
     heart.onload = () => {
       this.heart = heart;
       this.width = 25;
